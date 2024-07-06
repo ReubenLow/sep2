@@ -23,7 +23,13 @@ Expected Artefacts:
    - Conveyer stepper system
    - Printhead stepper system 
    - Microcontroller and sensors
-  
+
+# Power Regulation System: Stepper Motors
+![image](https://github.com/ReubenLow/sep2/assets/19299527/474b1c9e-c308-4cc6-96e6-29869da8d745)
+
+# Power Regulation System: Logical Circuit and button actuation
+
+![image](https://github.com/ReubenLow/sep2/assets/19299527/ad9e4ffe-3076-47fe-b08f-8f6ebeb549ca)
 
 
 Branches:
