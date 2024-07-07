@@ -29,7 +29,8 @@ Expected Artefacts:
 
 # Power Regulation System: Logical Circuit and button actuation
 
-![image](https://github.com/ReubenLow/sep2/assets/19299527/ad9e4ffe-3076-47fe-b08f-8f6ebeb549ca)
+![image](https://github.com/ReubenLow/sep2/assets/19299527/9a2162ec-aadd-4298-b4c3-a4ec7eef3045)
+
 
 
 Branches:
