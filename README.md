@@ -2,7 +2,7 @@
 
 
 ## "Name of the System" Description
-The system consist of `key components` that is the 
+The system consist of `key components reflecting functionalities` that is the 
   + Conveyer for Y Axis Movement
   + PrintHead/X Axis Carriage for X Axis Movement
   + Guiding Rod attached to printhead for Z Axis Movement
@@ -18,13 +18,13 @@ The `Pixy Camera` inteprets the conveyer belt based on image below. These object
 
 ![Alt text](URL or relative path to image)
 
-The pixy camera has two lines to create a `row` of objects along the `x-axis`.
+The pixy camera has two lines to create a `row` of objects along the `X-axis`.
 
 ![Alt text](URL or relative path to image)
 
 ### Row Object
 
-To guide X and Y Axis to move and print on which pastries, the program creates a `Row`, consist of `x coordinates` of pastries along the same row, a y coordinate `coordRow_Y` that serves as a reference point to bring the row to the `PRINTLINE` and the number of pastries/objects in the `Row`.
+To guide X and Y Axis to move and print on which pastries, the program creates a `Row`, consist of `x coordinates` of pastries along the same row, a y coordinate `coordRow_Y` that serves as a reference point to bring the `Row` to the `PRINTLINE` and the number of pastries/objects in the `Row`.
 
 ```
 typedef struct __row{
@@ -34,7 +34,38 @@ typedef struct __row{
 }Row;
 ```
 
-that are objects with centrepoints within the `Y Axis Buffer range`
+The program creates a reference point for a `Row`, as described in the code snippet below.
+
+The bottommost pastry i.e. pastry closest to the `PRINTLINE` is the reference point for a `Row`.
+
+```
+	for(int j = 0; j<numberOfBlocks; ++j)
+	{
+		//find the lowest centre point of an object within a "row" AND ONLY IF
+		//The bottom width of the object is before the EVENT HORIZON
+		//the lowest centre point of the object will be the main reference for a "row"
+		
+		if(pastry[j].coordY > rowval && pastry[j].bottomY<= EVENT_HORIZON)
+		{
+			rowval = pastry[j].coordY;
+		}
+
+	}
+```
+
+
+
+
+The program first finds the pastry closes to the `PRINTLINE` i.e. bottommost pastry along the `Y Axis` by looking at **centrepoints** of these pastries. Finding the bottommost pastry among other pastries require `rowval` for comparison. The bottommost pastry is selected at the end of the **for loop**. This is the program **first condition**.
+
+The **second condition** dictates that the pastry selected as the reference for `Row` must have its bottom width **before** the `EVENT_HORIZON` line.
+
+The images below descibes cases where `Row` is created based on conditions.
+
+
+
+
+
 
 ## X Axis Print Head Movement
 
@@ -55,8 +86,7 @@ The Y Axis Movement has the following **key** functions to guide and move the co
 
 ## Z Axis Print Head Movement
 The Z Axis Movement has the following **key** functions to guide and move the conveyer belt to move the tray of pastries along the Y axis.
-+ `moveZAxisUp()`
-+ `moveZAxisDown()`
++ `moveZAxis()`
 
 
 ## Emphasis
