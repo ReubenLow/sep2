@@ -11,6 +11,16 @@ The system consist of `key components` that is the
 
 The software integrates all of the components, with the keypad being the control panel, X and Y axis fully automated with PixyCam as the main driver for positional movement and manual/human control for Z Axis.
 
+
+## Pixy Camera For Positional Guidance
+
+The `Pixy Camera` inteprets the conveyer belt based on image below. The pixy camera has two lines to create a `row` of objects along the `x-axis`.
+
+These objects are pastries, with colour signature boxes on them.
+
+![Alt text](URL or relative path to image)
+
+
 ## X Axis Print Head Movement
 
 The X Axis Movement has the following **key** functions to guide the printhead to locations where the pastry is placed based on pixy camera.
@@ -20,8 +30,18 @@ The X Axis Movement has the following **key** functions to guide the printhead t
 + `backToHomePosition()`
 + `iniDelay()`
 + `xAxisMovement()`
-+ `conveyerMovePastry()`
 + `pressEveBot()`
+
+## Y Axis Print Head Movement
+The Y Axis Movement has the following **key** functions to guide and move the conveyer belt to move the tray of pastries along the Y axis.
++ `conveyerMovement(int z)`
++ `conveyerMovePastry()`
+
+
+## Z Axis Print Head Movement
+The Z Axis Movement has the following **key** functions to guide and move the conveyer belt to move the tray of pastries along the Y axis.
++ `moveZAxisUp()`
++ `moveZAxisDown()`
 
 
 ## Emphasis
