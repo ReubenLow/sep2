@@ -62,8 +62,14 @@ The **second condition** dictates that the pastry selected as the reference for 
 
 The images below descibes cases where `Row` is created based on conditions.
 
+![image](https://github.com/user-attachments/assets/a35a0d91-fcff-4777-af53-3589e18f1ad6)
+
+The image above describes a row being created because it **meets the two conditions mentioned**.
+
+![image](https://github.com/user-attachments/assets/cab1ff83-f002-4d0b-83f0-d942e36feb6c)
 
 
+The image above describes a row being created because it **does not meet the second condition**.
 
 
 
