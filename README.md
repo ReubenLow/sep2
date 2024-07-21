@@ -26,7 +26,9 @@ The pixy camera has two lines to create a `row` of objects along the `X-axis`.
 
 ### Row Object
 
-To guide X and Y Axis to move and print on which pastries, the program creates a `Row`, consist of `x coordinates` of pastries along the same row, a y coordinate `coordRow_Y` that serves as a reference point to bring the `Row` to the `PRINTLINE` and the number of pastries/objects in the `Row`.
+#### Creating a `Row` Reference Point
+
+To guide X and Y Axis to move and print on which pastries, the program creates a `Row`, consist of `x coordinates` of pastries along the same row, a y coordinate `coordRow_Y` that serves as **a reference point to bring the `Row` to the `PRINTLINE`** and the number of pastries/objects in the `Row`.
 
 ```
 typedef struct __row{
@@ -36,7 +38,7 @@ typedef struct __row{
 }Row;
 ```
 
-The program creates a reference point for a `Row`, as described in the code snippet below.
+**The program creates a reference point for a `Row`, as described in the code snippet below.**
 
 The bottommost pastry i.e. pastry closest to the `PRINTLINE` is the reference point for a `Row`.
 
@@ -72,8 +74,31 @@ The image above describes a row being created because it **meets the two conditi
 
 The image above shows that **no row is created** because it **does not meet the second condition**.
 
+### Adding Pastries to the `Row` Object
 
+Once `Row` reference point is selected i.e. closest to `PRINT_LINE`, the program now adds other pastries along the `Y axis` within a buffer set.
 
+Taking `Row.coordRow_Y`, which was set as a reference point along the Y axis i.e. conveyer, the program looks for pastries with centre point within `Row.coordRow_Y` and `Row.coordRow_Y - 10`. The snippet
+describes this pastry selection for the `Row` object.
+
+```
+	for(int i = 0; i< numberOfBlocks; ++i)//loop for the no objects
+	{
+		//since the lowest centrepoint is the reference for the row,
+		//we account for objects within the gap
+		//before the lowest centrepoint
+		if(pastry[i].coordY >= (rowval - 10) && pastry[i].coordY <= rowval){
+			row.coordXArray[i] = pastry[i].coordX;
+			row.numberOfRowObjects++;
+		}
+	}
+```
+
+The following image describes that two crossaints are selected because their centrepoints along the y axis is between the `Row.coordRow_Y` and `Row.coordRow_Y - 10`.
+
+![image](https://github.com/user-attachments/assets/046f05f3-0cde-4423-9ccf-0cb6a21168b1)
+
+Hence, a row is created with the `Row.coordXArray[]` **filled with the centrepoints of pastries along the x axis.**
 ## X Axis Print Head Movement
 
 The X Axis Movement has the following **key** functions to guide the printhead to locations where the pastry is placed based on pixy camera.
