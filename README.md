@@ -3,10 +3,10 @@
 
 ## "Name of the System" Description
 The system consist of `key components reflecting functionalities` that is the 
-  + Conveyer for Y Axis Movement
-  + PrintHead/X Axis Carriage for X Axis Movement
-  + Guiding Rod attached to printhead for Z Axis Movement
   + Pixy Camera for positional guidance
+  + PrintHead/X Axis Carriage for X Axis Movement
+  + Conveyer for Y Axis Movement
+  + Guiding Rod attached to printhead for Z Axis Movement
   + Keypad for program control
 
 The software integrates all of the components, with the keypad being the control panel, X and Y axis fully automated with PixyCam as the main driver for positional movement and manual/human control for Z Axis.
