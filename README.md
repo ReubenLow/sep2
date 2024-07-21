@@ -20,7 +20,8 @@ The `Pixy Camera` inteprets the conveyer belt based on image below. These object
 
 The pixy camera has two lines to create a `row` of objects along the `X-axis`.
 
-![Alt text](URL or relative path to image)
+![image](https://github.com/user-attachments/assets/afb91818-eba8-483c-b8ab-0044f4f41638)
+
 
 ### Row Object
 
