@@ -99,16 +99,26 @@ The following image describes that two crossaints are selected because their cen
 ![image](https://github.com/user-attachments/assets/046f05f3-0cde-4423-9ccf-0cb6a21168b1)
 
 Hence, a row is created with the `Row.coordXArray[]` **filled with the centrepoints of pastries along the x axis.**
+
+### Sorting the `Row.coordXArray[]`
+
+The row of x coordinates is sorted from smallest (closest to the origin or printhead) to the largest. This ensures that the printhead goes in proper sequence from left to right.
+
+```
+bubbleSort(row.coordXArray, 10);
+```
+
 ## X Axis Print Head Movement
 
 The X Axis Movement has the following **key** functions to guide the printhead to locations where the pastry is placed based on pixy camera.
     
 + `printHeadMovementRoutine_AUTO()`
-+ `printHeadMovementRoutine_Manual()`
 + `backToHomePosition()`
 + `iniDelay()`
 + `xAxisMovement()`
 + `pressEveBot()`
++ `printHeadMovementRoutine_Manual()`
+
 
 ## Y Axis Print Head Movement
 The Y Axis Movement has the following **key** functions to guide and move the conveyer belt to move the tray of pastries along the Y axis.
