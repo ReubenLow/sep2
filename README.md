@@ -1,10 +1,28 @@
-# Markdown syntax guide
+# "Name of the System" Software Documentation
 
-## Headers
 
-# This is a Heading h1
-## This is a Heading h2
-###### This is a Heading h6
+## "Name of the System" Description
+The system consist of `key components` that is the 
+  + Conveyer for Y Axis Movement
+  + PrintHead/X Axis Carriage for X Axis Movement
+  + Guiding Rod attached to printhead for Z Axis Movement
+  + Pixy Camera for positional guidance
+  + Keypad for program control
+
+The software integrates all of the components, with the keypad being the control panel, X and Y axis fully automated with PixyCam as the main driver for positional movement and manual/human control for Z Axis.
+
+## X Axis Print Head Movement
+
+The X Axis Movement has the following **key** functions to guide the printhead to locations where the pastry is placed based on pixy camera.
+    
++ `printHeadMovementRoutine_AUTO()`
++ `printHeadMovementRoutine_Manual()`
++ `backToHomePosition()`
++ `iniDelay()`
++ `xAxisMovement()`
++ `conveyerMovePastry()`
++ `pressEveBot()`
+
 
 ## Emphasis
 
