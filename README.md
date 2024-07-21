@@ -68,7 +68,7 @@ The images below descibes cases where `Row` is created based on conditions.
 
 The image above describes a row being created because it **meets the two conditions mentioned**.
 
-![image](https://github.com/user-attachments/assets/b09adeb9-f583-41bd-b3df-42659d06923c)
+![image](https://github.com/user-attachments/assets/b0bcb62c-8961-493a-af73-fce657c0e12b)
 
 The image above shows that **no row is created** because it **does not meet the second condition**.
 
