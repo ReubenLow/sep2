@@ -14,14 +14,14 @@ The software integrates all of the components, with the keypad being the control
 
 ## Pixy Camera For Positional Guidance
 
-The `Pixy Camera` inteprets the conveyer belt based on image below. These objects are pastries, with colour signature boxes on them.
+The `Pixy Camera` inteprets the conveyer belt based on image below. These objects are pastries, with `colour signature` boxes on them.
 
-![Alt text](URL or relative path to image)
+![image](https://github.com/user-attachments/assets/0a37ec5b-789d-44c6-a19a-3bd4714ff4cd)
+
 
 The pixy camera has two lines to create a `row` of objects along the `X-axis`.
 
-![image](https://github.com/user-attachments/assets/afb91818-eba8-483c-b8ab-0044f4f41638)
-
+![image](https://github.com/user-attachments/assets/28489d34-fe56-4523-99c5-2de9eea9a570)
 
 ### Row Object
 
@@ -46,7 +46,7 @@ The bottommost pastry i.e. pastry closest to the `PRINTLINE` is the reference po
 		//The bottom width of the object is before the EVENT HORIZON
 		//the lowest centre point of the object will be the main reference for a "row"
 		
-		if(pastry[j].coordY > rowval && pastry[j].bottomY<= EVENT_HORIZON)
+		if(pastry[j].coordY > rowval && pastry[j].bottomY<= EVENT_HORIZON) // EVENT_HORIZON is PRINTLINE - 10 pixels (Before PRINTLINE, hence subtract)
 		{
 			rowval = pastry[j].coordY;
 		}
@@ -59,20 +59,17 @@ The bottommost pastry i.e. pastry closest to the `PRINTLINE` is the reference po
 
 The program first finds the pastry closes to the `PRINTLINE` i.e. bottommost pastry along the `Y Axis` by looking at **centrepoints** of these pastries. Finding the bottommost pastry among other pastries require `rowval` for comparison. The bottommost pastry is selected at the end of the **for loop**. This is the program **first condition**.
 
-The **second condition** dictates that the pastry selected as the reference for `Row` must have its bottom width **before** the `EVENT_HORIZON` line.
+The **second condition** dictates that the pastry selected as the reference for `Row` must have its bottom width **before** the `PRINT_LINE` + 10 pixels line.
 
 The images below descibes cases where `Row` is created based on conditions.
 
-![image](https://github.com/user-attachments/assets/2b81a08d-3cab-48cb-a5bd-a9f3149a8530)
-
+![image](https://github.com/user-attachments/assets/21595b5b-d5f8-4a2a-a392-afe5c4a93e7b)
 
 The image above describes a row being created because it **meets the two conditions mentioned**.
 
-![image](https://github.com/user-attachments/assets/cf6c9175-0b26-4b7c-97d9-d18d4813af6c)
+![image](https://github.com/user-attachments/assets/a75389b7-3252-4dd9-ab67-384dc595e4b5)
 
-
-
-The image above describes a row being created because it **does not meet the second condition**.
+The image above shows that **no row is created** because it **does not meet the second condition**.
 
 
 
