@@ -1,38 +1,67 @@
-Systems Engineering Project 2 Repository
+# Markdown syntax guide
 
+## Headers
 
-Electrical Branch
+# This is a Heading h1
+## This is a Heading h2
+###### This is a Heading h6
 
-List of schematics:
+## Emphasis
 
-1. Power regulation schematic
-2. Respective electrical modules schematic
-    - Evebot Button activation system schematic
-    - Conveyer Stepper System schematic
-    - Microcontroller and sensors schematic
-       - Limit switches
-       - Pixy2 Camera
-       - Printhead movement
-     - Printhead stepper system schematic
+*This text will be italic*  
+_This will also be italic_
 
-Expected Artefacts:
-1. Fritzing Blueprints of the following along with:
-2. Copper board soldering plan for
-   - Power regulation system
-   - Evebot button activation system
-   - Conveyer stepper system
-   - Printhead stepper system 
-   - Microcontroller and sensors
+**This text will be bold**  
+__This will also be bold__
 
-# Power Regulation System: Stepper Motors
-![image](https://github.com/ReubenLow/sep2/assets/19299527/474b1c9e-c308-4cc6-96e6-29869da8d745)
+_You **can** combine them_
 
-# Power Regulation System: Logical Circuit and button actuation
+## Lists
 
-![image](https://github.com/ReubenLow/sep2/assets/19299527/9a2162ec-aadd-4298-b4c3-a4ec7eef3045)
+### Unordered
 
+* Item 1
+* Item 2
+* Item 2a
+* Item 2b
 
+### Ordered
 
-Branches:
-  - EveBot hardware interfaces
-  - STM32
+1. Item 1
+2. Item 2
+3. Item 3
+    1. Item 3a
+    2. Item 3b
+
+## Images
+
+![This is an alt text.](/image/sample.webp "This is a sample image.")
+
+## Links
+
+You may be using [Markdown Live Preview](https://markdownlivepreview.com/).
+
+## Blockquotes
+
+> Markdown is a lightweight markup language with plain-text-formatting syntax, created in 2004 by John Gruber with Aaron Swartz.
+>
+>> Markdown is often used to format readme files, for writing messages in online discussion forums, and to create rich text using a plain text editor.
+
+## Tables
+
+| Left columns  | Right columns |
+| ------------- |:-------------:|
+| left foo      | right foo     |
+| left bar      | right bar     |
+| left baz      | right baz     |
+
+## Blocks of code
+
+```
+let message = 'Hello world';
+alert(message);
+```
+
+## Inline code
+
+This web site is using `markedjs/marked`.
