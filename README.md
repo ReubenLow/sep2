@@ -14,7 +14,8 @@ The software integrates all of the components, with the keypad being the control
 
 ## Pixy Camera For Positional Guidance
 
-The `Pixy Camera` inteprets the conveyer belt based on image below. These objects are pastries, with `colour signature` boxes on them.
+The `Pixy Camera` inteprets the conveyer belt based on image below. These objects are pastries, with `colour signature` boxes on them. ***Based on the axes, towards right x value increases. As you go
+down, y value increases.***
 
 ![image](https://github.com/user-attachments/assets/0a37ec5b-789d-44c6-a19a-3bd4714ff4cd)
 
