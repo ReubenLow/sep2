@@ -14,12 +14,27 @@ The software integrates all of the components, with the keypad being the control
 
 ## Pixy Camera For Positional Guidance
 
-The `Pixy Camera` inteprets the conveyer belt based on image below. The pixy camera has two lines to create a `row` of objects along the `x-axis`.
-
-These objects are pastries, with colour signature boxes on them.
+The `Pixy Camera` inteprets the conveyer belt based on image below. These objects are pastries, with colour signature boxes on them.
 
 ![Alt text](URL or relative path to image)
 
+The pixy camera has two lines to create a `row` of objects along the `x-axis`.
+
+![Alt text](URL or relative path to image)
+
+### Row Object
+
+To guide X and Y Axis to move and print on which pastries, the program creates a `Row`, consist of `x coordinates` of pastries along the same row, a y coordinate `coordRow_Y` that serves as a reference point to bring the row to the `PRINTLINE` and the number of pastries/objects in the `Row`.
+
+```
+typedef struct __row{
+	uint16_t coordRow_Y;
+	uint16_t numberOfRowObjects;
+	uint16_t coordXArray[10];
+}Row;
+```
+
+that are objects with centrepoints within the `Y Axis Buffer range`
 
 ## X Axis Print Head Movement
 
