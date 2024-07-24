@@ -127,18 +127,30 @@ The `xAxisMovement((row.coordXArray[i]- datum) * PIXY_RATIO)` moves the printhea
 
 The diagram below illustrates this function.
 
+![image](https://github.com/user-attachments/assets/b557da16-8e1d-4f7b-ba70-d70d0010371d)
+
+
 
 + `iniDelay()`
 
 Once arrived at the location within an offset from the centrepoint of the pastry, the program commences `iniDelay()`. `iniDelay()` covers the distance gap EveBot is required to roll before actual printing commences. The distance gap was measured from the EveBot ruler illustrated below.
 
+![image](https://github.com/user-attachments/assets/09bf2aea-fd86-43e3-bcc7-4227ca1040fb)
+
+
 + `xAxisMovement(PRINTSIZE)`
 
 The printhead then moves according to the PRINTSIZE specified by the user in via the **keypad interface.** The default value for `PRINTSIZE` is 43. 
 
+![image](https://github.com/user-attachments/assets/75560c5b-b7f5-457a-84ca-2ebc1df672f0)
+
+
 + `backToHomePosition()`
 
 This function moves the printhead back to the HOME position i.e. until it hits the limit switch at HOME. Within this function, the program sends **HIGH** and **LOW** pulses until the limit switch toggles. The following diagram illustrates this:
+
+![image](https://github.com/user-attachments/assets/65b69bdd-a2d8-498a-bf1a-959c94c0d5e4)
+
 
 + `pressEveBot()`
 
