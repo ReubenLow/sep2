@@ -113,11 +113,29 @@ bubbleSort(row.coordXArray, 10);
 The X Axis Movement has the following **key** functions to guide the printhead to locations where the pastry is placed based on pixy camera.
     
 + `printHeadMovementRoutine_AUTO()`
-+ `backToHomePosition()`
-+ `iniDelay()`
-+ `xAxisMovement()`
-+ `pressEveBot()`
 + `printHeadMovementRoutine_Manual()`
+
+Both of these functions share the same sequence, except that `printHeadMovementRoutine_Manual()` does not have `pressEveBot()`, therefore requires a human to press within a 3 seconds window given.
+
+These two functions execute a logical sequence, calling helper functions shown in the following diagram below:
+
++ `xAxisMovement((row.coordXArray[i]- datum) * PIXY_RATIO)`
+The `xAxisMovement((row.coordXArray[i]- datum) * PIXY_RATIO)` moves the printhead to the centrepoints of pastries, starting with the first pastry. The `datum` is a preset value that offsets
+the printhead from the centrepoint of a pastry. The diagram below illustrates this function.
+
+
++ `iniDelay()`
+Once arrived at the location within an offset from the centrepoint of the pastry, the program commences `iniDelay()`. `iniDelay()` covers the distance gap EveBot is required to roll before actual printing commences. The distance gap was measured from the EveBot ruler illustrated below.
+
+
+
++ `xAxisMovement(PRINTSIZE)`
+
++ `backToHomePosition()`
+
+
++ `pressEveBot()`
+
 
 
 ## Y Axis Print Head Movement
