@@ -25,3 +25,11 @@ Expected Artefacts:
    - Conveyer stepper system
    - Printhead stepper system 
    - Microcontroller and sensors
+
+
+Fritzing Circuit Diagram
+- X-axis stepper motor
+- Z-axis stepper motor
+- Limit switch
+- Evebot button presser servo motor
+![sep2_bb](https://github.com/user-attachments/assets/96a6df8c-6ab5-4b7e-bc68-bd9827d7a462)
