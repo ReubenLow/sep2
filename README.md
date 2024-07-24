@@ -223,10 +223,11 @@ void conveyerMovePastry(){
 ## Z Axis Print Head Movement
 The Z Axis Movement moves the print carriage vertically (upwards or downwards). The diagram below shows where the z axis stepper motor and guiding rod is at:
 
-+ `moveZAxis()`
++ `void moveZAxisUp()`
++ `void moveZAxisDown()`
 
 ```
-void moveZAxis(){
+void moveZAxisUp(){
     int conveyerStepperDelay = 2000;
     GPIO_PinState zAxisDirectionStatus = HAL_GPIO_ReadPin(GPIOC, DIR_Z_AXIS_Pin);
     if(zAxisDirectionStatus == GPIO_PIN_RESET){
@@ -236,4 +237,19 @@ void moveZAxis(){
 	HAL_GPIO_TogglePin(GPIOC, STEP_Z_AXIS_Pin);
 	microDelay(conveyerStepperDelay);
 }
+```
+
++ `void moveZAxisDown()`
+```
+void moveZAxisDown(){
+    int conveyerStepperDelay = 2000;
+    GPIO_PinState zAxisDirectionStatus = HAL_GPIO_ReadPin(GPIOC, DIR_Z_AXIS_Pin);
+    if(zAxisDirectionStatus == GPIO_PIN_SET){
+    	HAL_GPIO_TogglePin(GPIOC, DIR_Z_AXIS_Pin);
+    	HAL_Delay(1);
+    }
+	HAL_GPIO_TogglePin(GPIOC, STEP_Z_AXIS_Pin);
+	microDelay(conveyerStepperDelay);
+}
+
 ```
