@@ -37,5 +37,4 @@ Fritzing Circuit Diagram 1 (sep2.fzz file)
 Fritzing Circuit Diagram 2 (Conveyor stepper motor diagram.fzz file)
 - Conveyor Y-axis stepper motor
 - Numpad
-![Conveyor stepper motor diagram_numpad](https://github.com/user-attachments/assets/f251e27f-907e-40bb-bfa3-69eda00a3a37)
-
+![Conveyor stepper motor diagram_numpad](https://github.com/user-attachments/assets/7c184dfd-9b16-43e8-8e02-6d779e4584b8)
