@@ -27,9 +27,15 @@ Expected Artefacts:
    - Microcontroller and sensors
 
 
-Fritzing Circuit Diagram
+Fritzing Circuit Diagram 1 (sep2.fzz file)
 - X-axis stepper motor
 - Z-axis stepper motor
 - Limit switch
 - Evebot button presser servo motor
 ![sep2_bb](https://github.com/user-attachments/assets/96a6df8c-6ab5-4b7e-bc68-bd9827d7a462)
+
+Fritzing Circuit Diagram 2 (Conveyor stepper motor diagram.fzz file)
+- Conveyor Y-axis stepper motor
+- Numpad
+![Conveyor stepper motor diagram_numpad](https://github.com/user-attachments/assets/f251e27f-907e-40bb-bfa3-69eda00a3a37)
+
