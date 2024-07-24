@@ -2,7 +2,7 @@
 
 
 ## "Name of the System" Description
-The system consist of `key components reflecting functionalities` that is the 
+The system consist of **key components reflecting functionalities** that is the 
   + Pixy Camera for positional guidance
   + PrintHead/X Axis Carriage for X Axis Movement
   + Conveyer for Y Axis Movement
@@ -130,12 +130,31 @@ Once arrived at the location within an offset from the centrepoint of the pastry
 
 
 + `xAxisMovement(PRINTSIZE)`
+The printhead then moves according to the PRINTSIZE specified by the user in via the **keypad interface.** The default value for `PRINTSIZE` is 43. 
 
 + `backToHomePosition()`
 
 
 + `pressEveBot()`
 
+### More information about the Helper Functions
+
+`xAxisMovement(int distance)`
+The function converts the arguement that is in mm the program assumes into **steps** for the stepper motor. The **steps** are for loop iterations, which sends
+**HIGH** and **LOW** pulses  in **alternating and fixed microseconds interval** to the motor driver. This routine is similar to conveyer stepper motor and z axis stepper motor
+movement, exept with differing values. The following code below showcases this:
+
+```
+void xAxisMovement(int distance){
+    int dist = distCal(distance);
+    int stepDelay = 1900;
+    for(int x =0; x<dist;++x)
+    {
+		HAL_GPIO_TogglePin(PRINTHEAD_STEP_PORT, PRINTHEAD_STEP_PIN);
+		microDelay(stepDelay);
+    }
+}
+```
 
 
 ## Y Axis Print Head Movement
