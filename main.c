@@ -43,27 +43,29 @@
 #define STEP_PORT_CONVEYOR GPIOA
 #define DIR_PORT_CONVEYOR GPIOB
 
-
-
+#define TURN180 200
+#define TURN360 400
+#define TOTALDIST 34.5
 #define INIDIST 10
-
+#define OBJ1 1
+#define OBJ2 2
 /**
- * Lines on pixy camera
+ * Lines
  */
-#define PRINT_LINE 200 // previous value 135
-#define EVENT_HORIZON 170 // 133
-
+//#define PRINT_LINE 135
+//#define PRINT_LINE 130
+//#define EVENT_HORIZON 133
+#define PRINT_LINE 200
+//#define EVENT_HORIZON 133
+#define EVENT_HORIZON 170
+#define ROW_LINE 80
+#define EXCESS_LINE 30
 #define PIXY_RATIO 1.5
 #define DATUM 20
 int PRINTSIZE = 43;
-
+#define CONVEYER_MOVEMENT_MULTIPLER 0.74
 #define RETRACT_PEN_UP 200
 #define EXTEND_PEN_DOWN 336
-
-//#define ROW_LINE 80 | NOT USED
-//#define EXCESS_LINE 30 | NOT USED
-//#define CONVEYER_MOVEMENT_MULTIPLER 0.74 | NOT USED
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -96,6 +98,17 @@ typedef struct __row{
 	uint16_t centreLine;
 }Row;
 
+typedef enum {
+	PRINT_INIT,
+	PRINT_DELAY1,
+	PRINT_DELAY2,
+	PRINT_PAUSE,
+	PRINT_RESTART,
+	PRINT_DONE
+} PrintState;
+
+PrintState printState = PRINT_INIT;
+uint32_t expiryTick = 0;
 
 typedef enum{
   TOGGLED_OFF = 0,
@@ -120,6 +133,30 @@ typedef enum __heightAdjustmentStatus{
 	downwards_set = 2
 }HeightAdjustmentState;
 
+typedef struct __keyPadInformation{
+	char theKey;
+	uint32_t previousTick;
+	uint32_t lastDebounceTime; // Last debounce time
+	HeightAdjustmentState adjustmentState;
+	ProgramState programState;
+	bool listeningForBreadWidth;
+}KeyPadInfo;
+
+LimitSwitch startSwitch = {
+  .state = TOGGLED_OFF
+};
+/**
+ *	@desc Variables related to key pad and key press routine
+ */
+KeyPadInfo keypad = {
+	.theKey = 'L',
+	.adjustmentState = no_set,
+	.programState = programOFF,
+	.lastDebounceTime = 0,
+	.previousTick = 0,
+	.listeningForBreadWidth = false
+};
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -137,7 +174,6 @@ SPI_HandleTypeDef hspi2;
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim3;
-uint8_t* responsePacketStart;
 
 UART_HandleTypeDef huart2;
 
@@ -168,54 +204,27 @@ uint8_t setLamp[] = {
   0x02,
   0x01
 };
-
 char inputBuffer[10];
 int bufferIndex = 0;
-volatile bool listeningForBreadWidth = false;
-volatile bool listeningForAxisHeight = false;
-volatile int breadWidth = 0;
-volatile int axisHeight = 0;
-volatile char lastKeyPressed = 'L'; // Track the last key pressed for debouncing
 int stepDelay = 700; // SPEED, 1000us more delay means less speed
-
-
 /**
  *	@desc For debugging: Tracks the checksum of the incoming response packet.
  */
 PixyChecksumState checkSumStatus;
-
 /**
- *	@desc Variables related to key pad and key press routine
- */
-
-volatile int rowKeypadMatrix;
-volatile int columnKeypadMatrix;
-volatile char theKey;
-uint32_t previousTick = 0;
-uint32_t lastDebounceTime = 0; // Last debounce time
-volatile char global;
-HeightAdjustmentState adjustmentState = no_set;
-ProgramState programState = programOFF;
-
-/**
- *	@desc Number of blocks/pastry detected by PixyCamera
+ *	@desc Number of pastries detected
  */
 uint8_t numberOfBlocks;
+/**
+ *	@desc Y coordinate Row reference point for each row line
+ */
 uint16_t rowval = 0;
-
-
-
-LimitSwitch startSwitch = {
-  .state = TOGGLED_OFF
-};
-
 
 Row row; // number of rows
 
+uint8_t* responsePacketStart;  // start of actual data packet within buffer
+
 PastryData pastry[6]; //max no of objects
-
-PixyChecksumState checkSumCalculator(uint8_t* array);
-
 
 /* USER CODE END PV */
 
@@ -226,8 +235,14 @@ static void MX_USART2_UART_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_TIM3_Init(void);
-/* USER CODE BEGIN PFP */
-
+/*
+ * @desc
+ *	Checksum calculator to verify that data is reliable to use
+ * @returns
+ * 	PIXY_RESULT_OK - if data is reliable
+ * 	PIXY_RESULT_ERROR - Do not use this data in the SPI Buffer
+ */
+PixyChecksumState checkSumCalculator(uint8_t* array);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -269,19 +284,13 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
-	HAL_GPIO_WritePin(DIR_PORT_CONVEYOR, DIR_PIN_CONVEYOR, GPIO_PIN_SET); //set conveyer in the right direction
-	HAL_GPIO_WritePin(PRINTHEAD_DIR_PORT, PRINTHEAD_DIR_PIN, GPIO_PIN_SET); //set printhead to move left -> right
-	HAL_GPIO_WritePin(GPIOC, DIR_Z_AXIS_Pin, GPIO_PIN_SET); //set z axis to move upwards
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);//Time channel 3 for PWM, specifically for servo motor
-	HAL_TIM_Base_Start(&htim1);// Time channel 1 to generate microsecond delays
+	HAL_GPIO_WritePin(DIR_PORT_CONVEYOR, DIR_PIN_CONVEYOR, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(PRINTHEAD_DIR_PORT, PRINTHEAD_DIR_PIN, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOC, DIR_Z_AXIS_Pin, GPIO_PIN_SET);
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
+	HAL_TIM_Base_Start(&htim1);
 	HAL_Delay(10);
-
-
-//	HAL_SPI_Transmit(&hspi2, setLamp, 5, 100); // to switch on the pixy lamp
-
-	// keypad gpio writes
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, 1);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, 0);
+//	HAL_SPI_Transmit(&hspi2, setLamp, 5, 100);
 
   /* USER CODE END 2 */
 
@@ -294,16 +303,15 @@ int main(void)
 	 */
 	  keyPadScanRoutine();
 	  //user has to hold '#' when there are no objects to stop the entire program
-	  if(programState == programON){// user presses "*" key to start the program
+	  if(programState == programON){
 		  normalOperationTestCase();
-	  }else{// user presses "C" key and let go to move printhead upwards
+	  }else{
 		  if(programState == adjustHeightUpwards){
 			  moveZAxisUp();
-		  } // user presses "D" key and let go to move printhead upwards
+		  }
 		  if(programState == adjustHeightDownwards){
 			  moveZAxisDown();
 		  }
-		  //user has to press C or D key (whichever selected) to stop the movement
 	  }
 //	  normalOperationTestCase();
 
@@ -927,8 +935,7 @@ void bubbleSort(uint16_t arr[], int n) {
 }
 /*
  * @desc
- *	Sorts the objects in the PastryData[] array according to distance closest from
- *	the left (datum) to the rightmost along the x axis
+ * Sends pulses every few microsends to the conveyer stepper motor to turn
  */
 void conveyerMovement(int z){
     int dist = distCal(z);
@@ -1005,6 +1012,8 @@ void testCaseZAxis(int z){
  *	Function will always be called in the main loop whenever the programState is set to
  *	1. adjustHeightUpwards
  *
+ *	That assumes that the user presses once, this function runs until the user presses the button once again
+ *
  */
 void moveZAxisUp(){
     int conveyerStepperDelay = 2000;
@@ -1021,6 +1030,8 @@ void moveZAxisUp(){
  *	Function will always be called in the main loop whenever the programState is set to
  *	1. adjustHeightDownwards
  *
+ *
+ *That assumes that the user presses once, this function runs until the user presses the button once again
  */
 void moveZAxisDown(){
     int conveyerStepperDelay = 2000;
@@ -1053,8 +1064,7 @@ void backToHomePosition() {
 }
 /*
  * @desc
- *	Moves the printhead back towards the leftmost/HOME position
- *	until the printhead hits the limit switch
+ 	 Uses TIM3 to generate PWM and turn the servo for EveBot button pressing
  *
  */
 void pressEveBot(void){
@@ -1070,9 +1080,10 @@ void pressEveBot(void){
 }
 
 /*
- * Will be iterated infinitely in the while loop
- * Conveyer runs upon detection of pastries
- * The conveyer runs until the lowest object
+ *
+ * @desc
+ * The Function "snapsshots" - essentially it is retrieving the positions of the
+ * pastries on the conveyer belt before the movement and printing routine starts.
  */
 void normalOperationTestCase(){
 	    HAL_SPI_Transmit(&hspi2, getBlocks, 6, 100);
@@ -1106,7 +1117,7 @@ void normalOperationTestCase(){
  *
  */
 void conveyerMovePastry(){
-	int distanceToTravel = row.coordRow_Y;
+	int distanceToTravel = row.coordRow_Y * PIXY_RATIO;
 	conveyerMovement(distanceToTravel);
 
 }
@@ -1146,9 +1157,7 @@ char Keypad_Scan(void)
                 // Set the current column pin back to HIGH
                 HAL_GPIO_WritePin(GPIOB, col_pins[col], GPIO_PIN_SET);
 
-                rowKeypadMatrix = row;
-                columnKeypadMatrix = col;
-                theKey = keys[row][col];
+
                 return keys[row][col];
             }
         }
@@ -1173,7 +1182,7 @@ void keyPadScanRoutine(){
 
     if (key != 'L' && (currentTick - lastDebounceTime) > DEBOUNCE_DELAY) // Key was pressed and debounce delay passed
     {
-        global = key;
+    	theKey = key;
         lastDebounceTime = currentTick; // Update debounce time
 
         if (key == 'A' && programState != programON)
@@ -1184,8 +1193,7 @@ void keyPadScanRoutine(){
         }
         else if (key == 'B' && listeningForBreadWidth)
         {
-            breadWidth = atoi(inputBuffer);
-            PRINTSIZE = breadWidth;
+        	PRINTSIZE = atoi(inputBuffer);
             listeningForBreadWidth = false;
         }
         else if (key == 'C')
