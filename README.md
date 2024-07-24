@@ -17,7 +17,8 @@ The software integrates all of the components, with the keypad being the control
 The `Pixy Camera` inteprets the conveyer belt based on image below. These objects are pastries, with `colour signature` boxes on them. ***Based on the axes, towards right x value increases. As you go
 down, y value increases.***
 
-![image](https://github.com/user-attachments/assets/0a37ec5b-789d-44c6-a19a-3bd4714ff4cd)
+![image](https://github.com/user-attachments/assets/bd544ce3-9286-47e4-9e27-31b1b18a1eff)
+
 
 
 The pixy camera has two lines to create a `row` of objects along the `X-axis`.
@@ -215,14 +216,24 @@ void conveyerMovePastry(){
 }
 ```
 
-## Z Axis Print Head Movement
-The Z Axis Movement has the following **key** functions to guide and move the conveyer belt to move the tray of pastries along the Y axis.
+![image](https://github.com/user-attachments/assets/9385b23c-a41c-487c-a324-9f9cae496d1e)
 
+
+
+## Z Axis Print Head Movement
+The Z Axis Movement moves the print carriage vertically (upwards or downwards). The diagram below shows where the z axis stepper motor and guiding rod is at:
 
 + `moveZAxis()`
-alert(message);
+
 ```
-
-## Inline code
-
-This web site is using `markedjs/marked`.
+void moveZAxis(){
+    int conveyerStepperDelay = 2000;
+    GPIO_PinState zAxisDirectionStatus = HAL_GPIO_ReadPin(GPIOC, DIR_Z_AXIS_Pin);
+    if(zAxisDirectionStatus == GPIO_PIN_RESET){
+    	HAL_GPIO_TogglePin(GPIOC, DIR_Z_AXIS_Pin);
+    	HAL_Delay(1);
+    }
+	HAL_GPIO_TogglePin(GPIOC, STEP_Z_AXIS_Pin);
+	microDelay(conveyerStepperDelay);
+}
+```
