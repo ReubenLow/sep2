@@ -55,17 +55,28 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-/**
- *	@desc Calculates the steps required given an x mm distance. 40 steps required to travel 1 mm
- *	@desc Does 400 iterations, of alternating high and low pulse i.e. 200 steps for one revolution
+/*
+ * @desc
+ * Converts the distance in mm to steps required for stepper to take
+ * The "steps" are looping values to be iterated UNTIL.
+ * @param distance in mm
  */
 int distCal(int distance);//in mm
-/**
- *	@desc blocking microsecond delay
+/*
+ * @desc
+ * Generates microsecond delay that otherwise not possible with HAL_Delay()
+ * @param delay
+ *
  */
 void microDelay (uint16_t delay);
-/**
- *	@desc Does the printing routine. GO FRONT, then GO RETRACT/GO BACK.
+/*
+ * @desc
+ * Function is called after evebot button is pressed
+ * The function is called to cover the distance gap that is marked on the evebot ruler before
+ * the start of distance measurement at START on the ruler.
+ *
+ * The Printhead moves by 5mm forward +ve X axis, before retracting 5mm backwards -ve X axis.
+ * Once back to the beginning of the printing position, movement() is called, with the PRINTIZE as the argument.
  */
 void iniDelay(void);
 /**
@@ -80,49 +91,156 @@ void retrieveGetBlocks(uint8_t* spiRxBuffer);
  *	@desc Retrieves the coordinates of blocks detected
  */
 void retrieveGetBlocks(uint8_t* spiRxBuffer);
-
-/**
- *	@desc Will only be executed if conveyer stepper stops and upon detection of pixy colour blocks
+/*
+ *	@desc
+ *	Manual Mode
+ *	ROUTINE:
+ *	1. (conveyerMovePastry) The conveyer moves the centre point of the lowest object (used as a row reference) to the PRINTLINE
+ *
+ *	2.  First datum point ??
+ *		For each object within the row along x axis
+ *		Travel to the (centrepoint - PRINTSIZE/2), i.e. printing point
+ *		Press the evebot button (a human does this)
+ *		move 5mm x2 back and forth to cover the gap where printing does not happen
+ *		move according to PRINTSIZE to print
+ *		Press the evebot button (a human does this)
+ *		Set the new datum point to be after the (centrepoint+printlength/2) of the previous object
+ *		Repeat
+ *
  */
 void printHeadMovementRoutine_Manual();
-
+/*
+ *	@desc
+ *	Auto Mode
+ *	ROUTINE:
+ *	1. (conveyerMovePastry) The conveyer moves the centre point of the lowest object (used as a row reference) to the PRINTLINE
+ *
+ *	2.  First datum point ??
+ *		For each object within the row along x axis
+ *		Travel to the (centrepoint - PRINTSIZE/2), i.e. printing point
+ *		Press the evebot button (Servo does this)
+ *		move 5mm x2 back and forth to cover the gap where printing does not happen
+ *		move according to PRINTSIZE to print
+ *		Press the evebot button (Servo does this)
+ *		Set the new datum point to be after the (centrepoint+printlength/2) of the previous object
+ *		Repeat
+ *
+ */
 void printHeadMovementRoutine_AUTO();
-
+/*
+ * @desc
+ *	1. Find a reference point for a row object i.e. lowest centre point or lowest object
+ *  2. Add all the pastries that falls within the buffer range of the reference point. i.e. y axis range from centrepoint
+ *
+ *  The new row will contain all the x_coords of pastries to be printed.
+ */
 int createRows();
-
+/*
+ * @desc
+ *	Moves the printhead according to the int z (distance in mm specified)
+ * @params
+ * int z is the distance in mm
+ */
 void xAxisMovement(int z);
-
-
-
+/*
+ * @desc
+ *	Helper Swap function for bubblesort
+ */
 void swap(uint16_t *xp, uint16_t *yp);
-// Function to perform Bubble Sort
+/*
+ * @desc
+ *	Sorts the objects in the PastryData[] array according to distance closest from
+ *	the left (datum) to the rightmost along the x axis
+ */
 void bubbleSort(uint16_t arr[], int n);
-
+/*
+ * @desc
+ * Sends pulses every few microsends to the conveyer stepper motor to turn
+ */
 void conveyerMovement(int z);
-
-// Limit switch
+/*
+ * @desc
+ *	Moves the printhead back towards the leftmost/HOME position
+ *	until the printhead hits the limit switch
+ *
+ */
 void backToHomePosition(void);
-
+/*
+ * @desc
+ 	 Uses TIM3 to generate PWM and turn the servo for EveBot button pressing
+ *
+ */
 void pressEveBot(void);
-
+/*
+ * @desc
+ *	Test case for x axis home movement
+ * @params
+ * distance (in mm) to test. Max is 250mm
+ */
 void testCaseHomeMovement(int z);
-
+/*
+ * @desc
+ *	Test case for pressing of evebot button (Whether successful button presses is achieved)
+ */
 void testCasePressEveBot();
-
+/*
+ * @desc
+ *	Test case for conveyer movement to move 14 cm forward (towards the printhead)
+ */
 void testCaseConveyerMovement();
-
+/*
+ *
+ * @desc
+ * The Function "snapsshots" - essentially it is retrieving the positions of the
+ * pastries on the conveyer belt before the movement and printing routine starts.
+ */
 void normalOperationTestCase();
-
+/*
+ * @desc
+ *	Moves the lowest centrepoint object among all objects along the row towards the printline
+ *
+ */
 void conveyerMovePastry();
-
+/*
+ * @desc
+ * @return
+ * Returns the key pressed among the keys found on the keypad
+ *
+ */
 char Keypad_Scan(void);
-
+/*
+ * @desc
+ * Main control program - Dictates whether the program is
+ * 1. adjusting the print size,
+ * 2. adjusting the height of current print head i.e. z axis
+ * 3. main program execution
+ *
+ */
 void keyPadScanRoutine();
-
+/*
+ * @desc
+ *	Test case z axis based on mm height that programmer puts
+ * @param
+ * int z in mm height
+ */
 void testCaseZAxis(int z);
-
+/*
+ * @desc
+ *	Function will always be called in the main loop whenever the programState is set to
+ *	1. adjustHeightUpwards
+ *
+ *	That assumes that the user presses once, this function runs until the user presses the button once again
+ *
+ */
 void moveZAxisUp();
-
+/*
+ * @desc
+ *	Function will always be called in the main loop whenever the programState is set to
+ *	1. adjustHeightDownwards
+ *
+ *
+ *That assumes that the user presses once, this function runs until the user presses the button once again
+ */
 void moveZAxisDown();
 /* USER CODE END EFP */
 
