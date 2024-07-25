@@ -1,7 +1,7 @@
-# "Name of the System" Software Documentation
+# "E.A.S.Y (EveBot Automated Solution, Why?)" Software Documentation
 
 
-## "Name of the System" Description
+## "(EveBot Automated Solution, Why?)" Description
 The system consist of **key components reflecting functionalities** that is the 
   + Pixy Camera for positional guidance
   + PrintHead/X Axis Carriage for X Axis Movement
