@@ -253,3 +253,11 @@ void moveZAxisDown(){
 }
 
 ```
+
+## Final Overview of the X Axis and Y Axis PrintHead and Conveyer Movement Routine (Flow Chart)
+
+![image](https://github.com/user-attachments/assets/0ab22698-b60b-439c-8399-0b588207aeb3)
+
+
+![image](https://github.com/user-attachments/assets/fa0682cc-7a3a-4d1d-9bf0-75fd7f4fd938)
+
